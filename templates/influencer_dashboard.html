@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home|Influencer</title>
+    <!--css link-->
+    <link rel="stylesheet" href="/static/style.css">
+    <!--css  icons-->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!--css bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--js bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body style="background-color: rgb(228, 228, 228);">
+    <!--Navbar-->   
+    <nav class="navbars-r">
+        <div class="logo">Insponsor</div>
+        <ul class="navbars-r-links">
+            <li class="active"><a href="/influencer/{{uname}}"><strong></strong><span class="material-symbols-outlined">home</span></a></li>
+            <li><a href="/influencer/{{uname}}/search/campaigns"><strong></strong><span class="material-symbols-outlined" >work</span></a></li>
+            <li><a href="/influencer/statistics/{{uname}}"><strong></strong><span class="material-symbols-outlined">query_stats</span></a></li>
+            <li><a href="/influencer/profile/{{uname}}"><strong></strong><span class="material-symbols-outlined">person</span></a></li>
+            <li><a href="/logout"><strong></strong><span class="material-symbols-outlined">logout</span></a></li>
+
+        </ul>
+    </nav>
+    <nav class="navbars-r1">
+        <h3>Good {{greeting}}, Hi {{uname}} !!</h3>
+    </nav>
+    
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert-overlay">
+        {% for msg in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+
+    <main>
+        <h1>Dashboard</h1>
+        <div class="insights">
+            <div class="earning">
+                <span class="material-symbols-outlined">analytics</span>
+                <div class="middle">
+                    <div class="left" style="margin-left:20px; margin-top:7px;">
+                        <h5>Earnings</h5>
+                        {% if earns %}
+                            <h6 style="font-size: 40px;">{{earns}}</h6>
+                        {% else %}
+                            <h6 style="font-size: 40px;">0</h6>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+                <small class="text-muted">Last 24 Hours</small> 
+            </div>
+            <div class="activeCampaigns">
+                <span class="material-symbols-outlined">campaign</span>
+                <div class="middle">
+                    <div class="left" style="margin-left:20px; margin-top:7px;">
+                        <h5>Active Campaigns</h5>
+                        {% if activeCampaign_no %}
+                            <h6 style="font-size: 40px;">{{activeCampaign_no}}</h6>
+                        {% else %}
+                            <h6 style="font-size: 40px;">0</h6>
+                        {% endif %}
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="completedCampaigns">
+                <span class="material-symbols-outlined">campaign</span>
+                <div class="middle">
+                    <div class="left" style="margin-left:20px; margin-top:7px;">
+                        <h5>Completed Campaigns</h5>
+                        {% if completedCampaign_no %}
+                            <h6 style="font-size: 40px;">{{completedCampaign_no}}</h6>
+                        {% else %}
+                            <h6 style="font-size: 40px;">0</h6>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="totalRating">
+                <span class="material-symbols-outlined">people_outline</span>
+                <div class="middle">
+                    <div class="left" style="margin-left:20px; margin-top:7px;">
+                        <h5>Total Ratings</h5>
+                        {% if ratings %}
+                            <h6 style="font-size: 40px;">{{ratings}}/5</h6>
+                        {% else %}
+                            <h6 style="font-size: 40px;">0/5</h6>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <hr>
+
+
+    <div class="container text-center">
+        <div class="row g-2">
+          <div class="col-6">
+            <div class="p-3 border bg-white" id="Sponsor-requests-container">
+                <h2><strong>Sponsor Ads Requests</strong></h2>
+                        <table class="table table-hover" >
+                            <thead >
+                                <tr>
+                                    <th scope="col">Campaign_Id</th>
+                                    <th scope="col">Company_Name</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ads, campaign, sponsor in adsRequests %}
+                                    <tr>
+                                        <td>{{ ads.campaign_id }}</td>
+                                        <td>{{ sponsor.company }}</td>
+                                        <td><button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#static-view-Request-{{ ads.campaign_id }}">View</button></td>
+                                    </tr>
+                                    <div class="modal fade" id="static-view-Request-{{ ads.campaign_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-view-{{ ads.campaign_id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel-view-{{ ads.campaign_id }}">Campaign Details</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+
+                                                <div class="modal-body">
+                                                    <div class="card-header" style="width: 800px;">
+                                                        <h1>{{ campaign.campaign_name }}</h1>
+                                                    </div> <br>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="form-floating">
+                                                                <input type="text" class="form-control" placeholder="{{ ads.campaign_id }}" name="C_id" value="{{ ads.campaign_id }}" readonly>
+                                                                <label for="floatingInput">Campaign ID</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="input-group mb-3">
+                                                                <label class="input-group-text" for="inputGroupSelect02-niche-{{ campaign.campaign_id }}">Niche</label>
+                                                                <select class="form-select" id="inputGroupSelect02-niche-{{ campaign.campaign_id }}" name="niche" disabled>
+                                                                    {% for niche in niches %}
+                                                                        <option value="{{ niche.niche_id }}" {% if niche.niche_id == campaign.niche %}selected{% endif %}>
+                                                                            {{ niche.name }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col" style="margin-top: 40px;">
+                                                            <div class="input-group mb-3">
+                                                                <label class="input-group-text" for="influencer-search-{{ campaign.campaign_id }}">
+                                                                    Preferred Influencer
+                                                                </label>
+                                                                <input 
+                                                                    list="influencers-{{ campaign.campaign_id }}" 
+                                                                    class="form-control" 
+                                                                    id="influencer-search-{{ campaign.campaign_id }}" 
+                                                                    name="P_Influencer" 
+                                                                    placeholder="Type to search..." 
+                                                                    aria-label="Search for preferred influencer"
+                                                                    value="{{ads.influencer.influencer_id }}" 
+                                                                    readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <label for="budget-input-{{ campaign.campaign_id }}" class="col-form-label">Budget:</label>
+                                                            <div class="input-group mb-3">
+                                                                <span class="input-group-text">₹</span>
+                                                                <input type="text" class="form-control" id="budget-input-{{ campaign.campaign_id }}" name="budget" aria-label="Amount (to the nearest rupee)" value="{{ campaign.budget }}">
+                                                                <span class="input-group-text">.00</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3 g-3">
+                                                        <div class="col-md-6">
+                                                            <label for="start_date" class="form-label">Start Date</label>
+                                                            <input type="date" class="form-control" value="{{campaign.start_date}}" id="start_date" name="start_date" readonly>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="end_date" class="form-label">End Date</label>
+                                                            <input type="date" class="form-control" value="{{campaign.end_date}}" id="end_date" name="end_date" readonly>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <label for="description-box-{{ campaign.campaign_id }}" class="col-form-label">Description:</label>
+                                                        <textarea class="form-control" id="description-box-{{ campaign.campaign_id }}" readonly>{{ campaign.description }}</textarea>
+                                                        <input type="hidden" name="description" value="{{ campaign.description }}">
+                                                    </div>
+                                                </div>
+                                            
+
+                                                <div class="accordion mt-4" id="campaignDetailsAccordion">
+                                                    <div class="card" style="background: aquamarine;">
+                                                        <div class="card-header" id="headingReviews-{{ campaign.campaign_id }}">
+                                                            <h2 class="mb-0">
+                                                                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReviews-{{ campaign.campaign_id }}" aria-expanded="false" aria-controls="collapseReviews-{{ campaign.campaign_id }}">
+                                                                    Influencer Negotiation :
+                                                                </button>
+                                                            </h2>
+                                                        </div>
+                                                        <form action="/influencer/{{uname}}/campaigns/{{campaign.campaign_id}}/adsrequest" method="post">
+                                                            <div id="collapseReviews-{{ campaign.campaign_id }}" class="accordion-collapse collapse" aria-labelledby="headingReviews-{{ campaign.campaign_id }}" data-bs-parent="#campaignDetailsAccordion-{{ campaign.campaign_id }}">
+                                                                <div class="card-body">
+                                                                    <div class="mb-3">
+                                                                        <label for="terms-description" class="col-form-label">Terms Description:</label>
+                                                                        <textarea class="form-control" id="terms-description" style="background: transparent;" name="Terms_descri"></textarea>
+                                                                    </div>
+    
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            <label for="influencer-budget" class="col-form-label">Influencer Budget:</label>
+                                                                            <div class="input-group mb-3" style="width: 250px;">
+                                                                                <span class="input-group-text" style="background: transparent;">₹</span>
+                                                                                <input type="text" class="form-control" style="background: transparent;" name="Influencer_budget" aria-label="Amount">
+                                                                                <span class="input-group-text" style="background: transparent;">.00</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                    <input type="hidden" name="S_id" value="{{ campaign.sponsor_id }}">
+                                                                    <button type="submit" class="btn btn-success">Negotiate</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="/influencer/{{uname}}/campaign/{{ campaign.campaign_id }}/adsrequest/accept" method="post">
+                                                        <input type="hidden" name="S_id" value="{{ sponsor.sponsor_id }}">
+                                                        <button type="submit" class="btn btn-success">Accept</button>
+                                                    </form>
+                                        
+                                                    <form action="/influencer/{{uname}}/campaign/{{ campaign.campaign_id }}/adsrequest/reject" method="post">
+                                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+            
+                                
+                            </tbody>
+                        </table>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 border bg-white" id="completed-campaigns">
+                <h2><strong>Completed Campaigns</strong></h2>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Campaign_Id</th>
+                                <th scope="col">Rating</th>
+                                <th scope="col">earning</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for campaigns, influencers, sponsors in completed_campaigns %}
+                                <tr>
+                                    <td>{{ campaigns.campaign_id }}</td>
+                                    {% if campaigns.ratings %}
+                                        {% for rate in campaigns.ratings  %}
+                                            {% if rate.campaign_id == campaigns.campaign_id  %}
+                                                <td>{{ rate.rating }}/5</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <td>0/5</td>
+                                    {% endif %}
+
+                                    {% if campaigns.invoices %}
+                                        {% for invoice in campaigns.invoices %}
+                                            {% if invoice.status == 'Paid' %}
+                                                <td style="font-size: 18px;"><span class="material-symbols-outlined" style="font-size: 16px;">
+                                                    currency_rupee
+                                                    </span>{{ invoice.payment_amount }}
+                                                </td>
+                                            {% else %}
+                                            <td style="font-size: 18px;"><span class="material-symbols-outlined" style="font-size: 16px;">
+                                                currency_rupee
+                                                </span>0.0
+                                            </td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                    <td style="font-size: 18px;"><span class="material-symbols-outlined" style="font-size: 16px;">
+                                        currency_rupee
+                                        </span>0.0
+                                    </td>
+                                    {% endif %}
+                                    
+
+                                    <td><button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#static-view2-Request-{{ campaigns.campaign_id }}">View</button></td>
+                                </tr>
+                                <div class="modal fade" id="static-view2-Request-{{ campaigns.campaign_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-view2-{{ campaigns.campaign_id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content" style="background: aquamarine;">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel-view2-{{ campaigns.campaign_id }}">Campaign Details</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="card-header" style="width: 800px;">
+                                                    <h1>{{ campaigns.campaign_name }}</h1>
+                                                    <h2 class="text-muted" style="width: 324px;">{{ sponsors.company }}</h2>
+                                                </div>
+                                                <input type="hidden" name="C_id" value="{{ campaigns.campaign_id }}">
+                                                <div class="card-body">
+                                                    <div class="row mb-3">
+                                                        <div class="col">
+                                                            <p><strong>Campaign Id:</strong> {{ campaigns.campaign_id }}</p>
+                                                        </div>
+                                                        <div class="col">
+                                                            <p><strong>Sponsor:</strong> {{ sponsors.username }}</p>
+                                                        </div>
+                                                    </div>
+                                        
+                                                   
+                                                    <div class="row mb-3">
+                                                        <div class="col">
+                                                            <p><strong>Visibility:</strong> {{ campaigns.visibility }}</p>
+                                                        </div>
+                                                        <div class="col">
+                                                            <p><strong>Status:</strong> 
+                                                                <span class="badge bg-info text-white">{{ campaigns.status }}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                        
+                                              
+                                                    <div class="row mb-3">
+                                                        <div class="col">
+                                                            <p><strong>Budget:</strong></p>
+                                                            <div class="input-group mb-3" style="max-width: 250px;">
+                                                                <span class="input-group-text" >₹</span>
+                                                                <input type="text" class="form-control" id="budget-input-{{ campaigns.campaign_id }}" name="budget" value="{{ campaigns.budget }}" readonly>
+                                                                <span class="input-group-text" >.00</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            {% for rate in campaigns.ratings %}
+                                                                {% if rate.campaign_id == campaigns.campaign_id %}
+                                                                    <p><strong>Rating:</strong></p>
+                                                                    <div class="rating">
+                                                                        {% for i in range(1, 6) %}
+                                                                            {% if i <= rate.rating %}
+                                                                                <i class="fa fa-star" style="color: gold;" ></i>
+                                                                            {% else %}
+                                                                                <i class="fa fa-star" style="color: lightgray;"></i>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                         
+                                                            
+                                                                    
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                        {% for invoice in campaigns.invoices %}
+                                                        <div class="col">
+                                                            <p><strong>Payment Amount:</strong></p>
+                                                            <div class="input-group mb-3" style="max-width: 250px;">
+                                                                <span class="input-group-text" >₹</span>
+                                                                <input type="text" class="form-control" id="payment-amount-input-{{ campaigns.campaign_id }}" name="payment_amt" value="{{ invoice.payment_amount }}" readonly>
+                                                                <span class="input-group-text">.00</span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {% endfor %}
+                                                        
+                                                    </div>
+                                                    
+                                        
+                                                    <div class="mb-3">
+                                                        <label for="description-box-{{ campaigns.campaign_id }}" class="col-form-label">
+                                                            <strong>Description:</strong>
+                                                        </label>
+                                                        <textarea class="form-control" id="description-box-{{ campaigns.campaign_id }}" name="description" readonly style="min-height: 150px;">{{ campaigns.description }}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion mt-4" id="campaignDetailsAccordion">
+                                                    <!-- Other sections -->
+                                                    <div class="card" style="background: aquamarine;">
+                                                        <div class="card-header" id="headingInvoices-{{ campaigns.campaign_id }}">
+                                                            <h2 class="mb-0">
+                                                                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInvoices-{{ campaigns.campaign_id }}" aria-expanded="false" aria-controls="collapseInvoices-{{ campaigns.campaign_id }}">
+                                                                    Invoices
+                                                                </button>
+                                                            </h2>
+                                                        </div>
+                                                        <div id="collapseInvoices-{{ campaigns.campaign_id }}" class="collapse" aria-labelledby="headingInvoices-{{ campaigns.campaign_id }}" data-bs-parent="#campaignDetailsAccordion">
+                                                            <div class="card-body">
+                                                                <ul class="list-group">
+                                                                    {% for invoice in campaigns.invoices %}
+                                                                        <li class="list-group-item">
+                                                                            <a href="{{ url_for('view_invoice', invoice_id=invoice.id) }}">Invoice #{{ invoice.id }}</a>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion mt-4" id="campaignDetailsAccordion">
+                                                    <div class="card" style="background: aquamarine;">
+                                                        <div class="card-header" id="headingReviews-{{ campaigns.campaign_id }}">
+                                                            <h2 class="mb-0">
+                                                                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReviews-{{ campaigns.campaign_id }}" aria-expanded="false" aria-controls="collapseReviews-{{ campaigns.campaign_id }}">
+                                                                    Review
+                                                                </button>
+                                                            </h2>
+                                                        </div>
+                                                        <div id="collapseReviews-{{ campaigns.campaign_id }}" class="accordion-collapse collapse" aria-labelledby="headingReviews-{{ campaigns.campaign_id }}" data-bs-parent="#campaignDetailsAccordion-{{ campaigns.campaign_id }}">
+                                                            <div class="card-body">
+                                                                <div class="mb-3">
+                                                                    {% if campaigns.reviews %}
+                                                                        {% for review in campaigns.reviews %}
+                                                                            {% if review.campaign_id == campaigns.campaign_id %}
+                                                                                <textarea class="form-control" id="description-box-{{ review.review_id }}" name="review" readonly style="background: transparent;">{{ review.review }}</textarea>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% endif %}
+                                                                    <input type="hidden" name="S_id" value="{{ sponsors.sponsor_id }}">
+                                                                    <input type="hidden" name="C_id" value="{{ campaigns.campaign_id }}">
+                                                                    <input type="hidden" name="I_id" value="{{ influencers.influencer_id }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        
+                                                    
+                                                    
+                                                    
+                                                                                               
+                                                    
+                                                    <!------    
+                                                    <div class="card" style="background: aquamarine;">
+                                                        <div class="card-header" id="headingInvoices">
+                                                            <h2 class="mb-0">
+                                                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseInvoices" aria-expanded="false" aria-controls="collapseInvoices">
+                                                                    Invoices
+                                                                </button>
+                                                            </h2>
+                                                        </div>
+                                                        <div id="collapseInvoices" class="collapse" aria-labelledby="headingInvoices" data-parent="#campaignDetailsAccordion">
+                                                            <div class="card-body">
+                                                                <ul class="list-group">
+                                                                    {% for invoice in campaigns.invoices %}
+                                                                    <li class="list-group-item">{{ invoice.details }}</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                ------>
+                                            </div>
+                                            
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                
+            </div>
+            
+          </div>
+          <div class="col-6">
+            <div class="p-3 border bg-white" id="active-campaigns-container">
+                <h2><strong>Active Campaigns</strong></h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Campaign_Id</th>
+                            <th scope="col">progress <br> (in %)</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for campaigns, influencers, sponsors in active_campaign %}
+                            <tr>
+                                <td>{{ campaigns.campaign_id }}</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                                    </div>
+                                </td>
+                                <td><button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#static-view1-Request-{{ campaigns.campaign_id }}">View</button></td>
+                            </tr>
+                            <form action="/influencer/campaign/{{uname}}/completed" method="post">
+                                <input type="hidden" name="C_id" value="{{ campaigns.campaign_id }}">
+                                <input type="hidden" name="I_id" value="{{ influencers.influencer_id }}">
+                                <input type="hidden" name="S_id" value="{{ sponsors.sponsor_id }}">
+                                <div class="modal fade" id="static-view1-Request-{{ campaigns.campaign_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-view1-{{ campaigns.campaign_id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content" style="background: aquamarine;">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel-view1-{{ campaigns.campaign_id }}">Campaign Details</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="card-header" style="width: 800px;">
+                                                    <h1>{{ campaigns.campaign_name }}</h1>
+                                                    <h2 class="text-muted" style="width: 324px;">{{ sponsors.company }}</h2>
+                                                </div>
+                                                <input type="hidden" name="C_id" value="{{ campaigns.campaign_id }}">
+                                                <input type="hidden" name="S_id" value="{{sponsors.sponsor_id}}">
+                                                <input type="hidden" name="budget" value="{{campaigns.budget}}">
+                                                <div class="card-body">
+                                                    
+                                                    <div class="row mb-3">
+                                                        <div class="col">
+                                                            <p><strong>Campaign Id:</strong> {{ campaigns.campaign_id }}</p>
+                                                        </div>
+                                                        <div class="col">
+                                                            <p><strong>Sponsor:</strong> {{ sponsors.username }}</p>
+                                                        </div>
+                                                    </div>
+                                        
+                                                   
+                                                    <div class="row mb-3">
+                                                        <div class="col">
+                                                            <p><strong>Visibility:</strong> {{ campaigns.visibility }}</p>
+                                                        </div>
+                                                        <div class="col">
+                                                            <p><strong>Status:</strong> 
+                                                                <span class="badge bg-info text-white">{{ campaigns.status }}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                        
+                                              
+                                                    <div class="row mb-3">
+                                                        <div class="col">
+                                                            <p><strong>Budget:</strong></p>
+                                                            <div class="input-group mb-3" style="max-width: 250px;">
+                                                                <span class="input-group-text" >₹</span>
+                                                                <input type="text" class="form-control" id="budget-input-{{ campaigns.campaign_id }}" name="budget" value="{{ campaigns.budget }}" readonly>
+                                                                <span class="input-group-text" >.00</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            {% for rate in campaigns.ratings %}
+
+                                                                {% if rate.campaign_id == campaigns.campaign_id %}
+                                                                    <p><strong>Rating:</strong></p>
+
+                                                                    <div class="rating">
+                                                                        {% for i in range(1, 6) %}
+                                                                            {% if i <= rate.rating %}
+                                                                                <i class="fa fa-star" style="color: gold;"></i>
+                                                                            {% else %}
+                                                                                <i class="fa fa-star" style="color: lightgray;"></i>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                         
+                                                            
+                                                                    
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                        
+                                                        <div class="col">
+                                                            <p><strong>Payment Amount:</strong></p>
+                                                            <div class="input-group mb-3" style="max-width: 250px;">
+                                                                <span class="input-group-text" >₹</span>
+                                                                <input type="text" class="form-control" id="payment-amount-input-{{ campaigns.campaign_id }}" name="payment_amt" value="{{ campaigns.payment_amt }}" readonly>
+                                                                <span class="input-group-text">.00</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                        
+                                                    <div class="mb-3">
+                                                        <label for="description-box-{{ campaigns.campaign_id }}" class="col-form-label">
+                                                            <strong>Description:</strong>
+                                                        </label>
+                                                        <textarea class="form-control" id="description-box-{{ campaigns.campaign_id }}" name="description" readonly style="min-height: 150px;">{{ campaigns.description }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-outline-success">Completed</button>
+                                            </div>
+                                            
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 border bg-white" id="flag-campaigns-container">
+                <h2>Flag Campaigns</h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Campaign_Id</th>
+                            <th scope="col">progress <br> (in %)</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for campaigns, influencers, sponsors in flagged_campaign %}
+                            <td>{{campaigns.campaign_id}}</td>
+                            <td>
+                                <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" style="width: 75%"></div>
+                                </div>
+                            </td>
+                            <td><button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#static-view1-Request-{{ campaigns.campaign_id }}">View</button></td>
+
+                            <div class="modal fade" id="static-view1-Request-{{ campaigns.campaign_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-view1-{{ campaigns.campaign_id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content" style="background: aquamarine;">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel-view1-{{ campaigns.campaign_id }}">Campaign Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card-header" style="width: 800px;">
+                                                <h1>{{ campaigns.campaign_name }}</h1>
+                                                <h2 class="text-muted" style="width: 324px;">{{ sponsors.company }}</h2>
+                                            </div>
+                                            <input type="hidden" name="C_id" value="{{ campaigns.campaign_id }}">
+                                            <div class="card-body">
+                                                
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <p><strong>Campaign Id:</strong> {{ campaigns.campaign_id }}</p>
+                                                    </div>
+                                                    <div class="col">
+                                                        <p><strong>Sponsor:</strong> {{ sponsors.username }}</p>
+                                                    </div>
+                                                </div>
+                                    
+                                               
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <p><strong>Visibility:</strong> {{ campaigns.visibility }}</p>
+                                                    </div>
+                                                    <div class="col">
+                                                        <p><strong>Status:</strong> 
+                                                            <span class="badge bg-info text-white">{{ campaigns.status }}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                    
+                                          
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <p><strong>Budget:</strong></p>
+                                                        <div class="input-group mb-3" style="max-width: 250px;">
+                                                            <span class="input-group-text" >₹</span>
+                                                            <input type="text" class="form-control" id="budget-input-{{ campaigns.campaign_id }}" name="budget" value="{{ campaigns.budget }}" readonly>
+                                                            <span class="input-group-text" >.00</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        {% for rate in campaigns.ratings %}
+
+                                                            {% if rate.campaign_id == campaigns.campaign_id %}
+                                                                <p><strong>Rating:</strong></p>
+
+                                                                <div class="rating">
+                                                                    {% for i in range(1, 6) %}
+                                                                        {% if i <= rate.rating %}
+                                                                            <i class="fa fa-star" style="color: gold;"></i>
+                                                                        {% else %}
+                                                                            <i class="fa fa-star" style="color: lightgray;"></i>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </div>
+                                                     
+                                                        
+                                                                
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    
+                                                    <div class="col">
+                                                        <p><strong>Payment Amount:</strong></p>
+                                                        <div class="input-group mb-3" style="max-width: 250px;">
+                                                            <span class="input-group-text" >₹</span>
+                                                            <input type="text" class="form-control" id="payment-amount-input-{{ campaigns.campaign_id }}" name="payment_amt" value="{{ campaigns.payment_amt }}" readonly>
+                                                            <span class="input-group-text">.00</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                    
+                                                <div class="mb-3">
+                                                    <label for="description-box-{{ campaigns.campaign_id }}" class="col-form-label">
+                                                        <strong>Description:</strong>
+                                                    </label>
+                                                    <textarea class="form-control" id="description-box-{{ campaigns.campaign_id }}" name="description" readonly style="min-height: 150px;">{{ campaigns.description }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+    </div>
+
+   
+
+
+
+    
+    <script src="{{ url_for('static', filename='flash.js') }}"></script>
+</body>
+<!--this is my footer part-->
+<footer>
+    <div class="container-footer">
+        <form action="">
+            
+        </form>
+    </div>
+    <div class="devop-rg">
+        <h4 ><strong><em>21f3002277@ds.study.iitm.ac.in  |</em>  VIKASH PRASAD</strong>  <em>|</em> IITMADRAS.All rights are reversed ** </h4>
+    </div>
+</footer>
+</html>

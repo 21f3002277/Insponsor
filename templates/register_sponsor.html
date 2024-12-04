@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register|Insponsor</title>
+    <!--css link-->
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbars-r">
+        <div class="logo" >Insponsor</div>
+        <ul class="navbars-r-links">
+            <li><a href="/registerSponsor" style="margin-top: 15px;"><strong>SPONSOR</strong></a></li>
+            <li><a href="/registerInfluencer" style="margin-top: 15px;"><strong>INFLUENCER</strong></a></li>
+        </ul>
+        </div>
+    </nav>
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for  msg in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    
+
+    <div class="container-userinfos">
+        <form action="/registerSponsor" method="POST" enctype="multipart/form-data">
+            <h2>Register to Insponsor !! <br> <br>Join Now</h2>
+            <div class="profile-section">
+                <img src="/static/img/blank-profile-picture-973460_1280.png" style="border: 0px; margin-top: 0px;">
+                <input type="file" name="photo" accept="image/*">
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control"  name="U_Id"placeholder="name@example.com">
+                <label for="floatingInput">Username</label>
+              </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="F_name" placeholder="name@example.com">
+                <label for="floatingInput">Full Name</label>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="pwd" placeholder="name@example.com">
+                        <label for="floatingInput">Password</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="C_pwd" placeholder="name@example.com">
+                        <label for="floatingInput">Confirm Password</label>
+                    </div>
+                </div>
+              </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="C_name" placeholder="name@example.com">
+                        <label for="floatingInput">Company Name</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="J_title" placeholder="">
+                        <label for="floatingInput">Jobtile</label>
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" name="email" placeholder="name@example.com">
+                        <label for="floatingInput">Email</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="mobile_no" class="form-control" name="mobile" placeholder="name@example.com">
+                        <label for="floatingInput">Mobile No.</label>
+                    </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="basic-url" class="form-label">Your Social Media URLs:</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon-instagram">https://www.instagram.com/</span>
+                    <input type="text" class="form-control" id="instagram-url" name="instagram" aria-describedby="basic-addon-instagram">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon-facebook">https://www.facebook.com/</span>
+                    <input type="text" class="form-control" id="facebook-url" name="facebook" aria-describedby="basic-addon-facebook">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon-youtube">https://www.youtube.com/</span>
+                    <input type="text" class="form-control" id="youtube-url" name="youtube" aria-describedby="basic-addon-youtube">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon-linkedin">https://www.linkedin.com/</span>
+                    <input type="text" class="form-control" id="linkedin-url" name="linkedin" aria-describedby="basic-addon-linkedin">
+                </div>
+            </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gridCheck" required>
+                <label class="form-check-label" for="gridCheck">
+                  Check me out
+                </label>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary" style="width: 240px; height: 35px al;">Join Now</button>
+              </div>
+              <div class="having_account">
+                <hr />
+                I have account ? <a href="/login">Login</a>
+            </div>
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='flash.js') }}"></script>
+</body>
+
+<!--this is my footer part-->
+<footer>
+    <div class="container-footer">
+        <form action="">
+            
+        </form>
+    </div>
+    <div class="devop-rg">
+        <h4 ><strong><em>21f3002277@ds.study.iitm.ac.in  |</em>  VIKASH PRASAD</strong>  <em>|</em> IITMADRAS.All rights are reversed ** </h4>
+    </div>
+</footer>
+</html>

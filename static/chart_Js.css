@@ -1,0 +1,20 @@
+*{
+    margin: 0px;
+}
+
+.charts-section {
+    padding: 40px 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.charts-section h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 0px;
+    color: #333;
+}

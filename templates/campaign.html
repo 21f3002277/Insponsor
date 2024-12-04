@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign|Insponsor </title>
+    <!--css link-->
+    <link rel="stylesheet" href="/static/style.css">
+    <!--css  icons-->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!--css bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--js bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body style="background-color: rgb(228, 228, 228);">
+
+    <!--Navbar-->   
+    <nav class="navbars-r">
+        <div class="logo">Insponsor</div>
+        <ul class="navbars-r-links">
+            <li class="active"><a href="/sponsor/{{uname}}"><strong></strong><span class="material-symbols-outlined">home</span></a></li>
+            <li class="active"><a href="/sponsor/campaign/{{uname}}"><strong></strong><span class="material-symbols-outlined">campaign</span></a></li>
+            <li><a href="/sponsor/{{uname}}/searchInfluencer"><strong></strong><span class="material-symbols-outlined">person_search</span></a></li>
+            <li><a href="#"><strong></strong><span class="material-symbols-outlined">query_stats</span></a></li>
+            <li><a href="profile.html"><strong></strong><span class="material-symbols-outlined">person</span></a></li>
+            <li><a href="/login"><strong></strong><span class="material-symbols-outlined">logout</span></a></li>
+
+        </ul>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="buttons">
+        <h4 style="color: white;">Filter By</h4>
+        <div class="radio-container">
+            
+            <div class="visibility-container" style="margin-bottom: 20px;">
+                <h5>Select Visibility:</h5>
+                <div class="mb-3">
+                    <label class="form-check-label me-2">
+                        <input class="form-check-input" type="checkbox" name="campaignType" value="Public"> Public
+                    </label>
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="campaignType" value="Private"> Private
+                    </label>
+                </div>
+            </div>
+            <hr>
+            <div class="niche-content" style="margin-top: 20px;">
+                <h5>Niche :</h5>
+                {% for niche in niches %}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input niche-checkbox" type="checkbox" name="nicheType" id="checkbox{{ niche.niche_id }}" value="{{ niche.niche_id }}">
+                        <label class="form-check-label" for="checkbox{{ niche.niche_id }}">{{ niche.name }}</label>
+                    </div>
+                
+                {% endfor %}
+
+            </div>
+            
+        </div> <br>
+
+        <div class="range-container">
+            <label for="budget">Budget: </label>
+            <input type="range" id="budget" name="budget" min="0" max="10000000000000000" step="100" value="10000000000000000000000">
+            <span class="range-value" id="budget-value">$</span>
+        </div>
+    </div>
+    
+
+
+
+    <!----Create new campaign button & modal---->
+
+
+    <div class="btn-modal-addCampaign">
+        <label for="btn-addCampaign">Create New Campaign</label>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn-addCampaign" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><span class="material-symbols-outlined">
+            add
+            </span></button>
+    
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Add New Campaign</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ url_for('SponsorCampaign', user_id=uname) }}" method="post">
+                        <!-- Include CSRF token if using Flask-WTF -->
+                        {% if csrf_token %}
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        {% endif %}
+                        <div class="modal-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="campaign_Id" class="form-label">Campaign ID</label>
+                                    <input type="text" class="form-control" id="campaign_Id" name="campaign_Id" value="{{ campaigns_id }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="campaign_name" class="form-label">Campaign Name</label>
+                                    <input type="text" class="form-control" id="campaign_name" name="campaign_name" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="niche" class="form-label">Niche</label>
+                                    <select class="form-select" id="niche" name="niche" required>
+                                        <option value="" selected disabled>Choose...</option>
+                                        {% for niche in niches %}
+                                            <option value="{{ niche.niche_id }}">{{ niche.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="date" class="form-control" id="end_date" name="end_date" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description-box" class="form-label">Description</label>
+                                <textarea class="form-control" id="description-box" name="description" rows="3" required></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="budget-input" class="col-form-label">Budget :  </label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">₹</span>
+                                        <input type="text" class="form-control" name="budget" aria-label="Amount (to the nearest dollar)">
+                                        <span class="input-group-text">0.00</span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!---- End of Create campaign---->
+
+    
+
+    <!----List of campaigns created by particular sponsors---->
+
+
+
+
+    <div class="active-campaign-container">
+        <div class="tab_header_container">
+            <div class="tab_filter_container">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Campaign Id" id="myInput" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="searchFun()">Search</button>
+                </div>
+                <hr>
+                <div class="Campaign-list" id="campaign-list">
+                    <table class="table table-hover" id="campaignTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Campaign Id</th>
+                                <th scope="col">Campaign Name</th>
+                                <th scope="col">Progress/Stages</th>
+                                <th scope="col">View</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="campaign-tbody">
+                            {% for campaign in campaign_records %}
+                                <tr data-type="{{ campaign.visibility }}" data-niche="{{campaign.niche}}" data-budget="{{campaign.budget}}">
+                                    <td><h5>{{ campaign.campaign_id }}</h5></td>
+                                    <td><h6>{{ campaign.campaign_name }}</h6></td>
+                                    <td class="align-middle text-center">
+                                        <button type="button"  class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#static-send-adRequest-{{ campaign.campaign_id }}">
+                                            View
+                                        </button>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#static-view-adRequest-{{ campaign.campaign_id }}">
+                                            Update
+                                        </button>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#static-delete-adRequest-{{ campaign.campaign_id }}">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                    <div id="no-records-message" style="display: none; text-align: center; margin-top: 20px;">
+                        <p>No Record Found</p>
+                    </div>
+
+
+                    <!-- Place all modals outside the table -->
+                    {% for campaign in campaign_records %}
+                        <!-- Modal for Send Ads Request -->
+                        <form action="/sponsor/campaign/{{uname}}/adsRequest" method="post">
+                            <div class="modal fade" id="static-send-adRequest-{{ campaign.campaign_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-send-{{ campaign.campaign_id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel-send-{{ campaign.campaign_id }}">Send Ads Request</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card-header" style="width: 800px;">
+                                                <h1>{{ campaign.campaign_name }}</h1>
+                                            </div> <br>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" placeholder="{{ campaign.campaign_id }}" value="{{ campaign.campaign_id }}" readonly>
+                                                        <label for="floatingInput">Campaign ID</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="input-group mb-3">
+                                                        <label class="input-group-text" for="inputGroupSelect02-niche-{{ campaign.campaign_id }}" >Niche</label>
+                                                        <select class="form-select" id="inputGroupSelect02-niche-{{ campaign.campaign_id }}" disabled>
+                                                            {% for niche in niches %}
+                                                                <option value="{{ niche.name }}" {% if niche.niche_id == campaign.niche %}selected{% endif %}>
+                                                                    {{ niche.name }}
+                                                                </option> 
+                                                            {% endfor %} 
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col" style="margin-top: 40px;">
+                                                    <div class="input-group mb-3">
+                                                        <label class="input-group-text" for="influencer-search-{{ campaign.campaign_id }}">
+                                                            Preferred Influencer
+                                                        </label>
+                                                        <input 
+                                                            list="influencers-{{ campaign.campaign_id }}" 
+                                                            class="form-control" 
+                                                            id="influencer-search-{{ campaign.campaign_id }}" 
+                                                            name="P_Influencer" 
+                                                            placeholder="Type to search..." 
+                                                            aria-label="Search for preferred influencer" 
+                                                            required>
+                                                            
+                                                        <datalist id="influencers-{{ campaign.campaign_id }}">
+                                                            {% if filtered_influencers[campaign.campaign_id] %}
+                                                                {% for influ in filtered_influencers[campaign.campaign_id] %}
+                                                                    <option value="{{ influ.influencer_id }}" data-username="{{ influ.username }}">
+                                                                        {{ influ.username }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <option value="" disabled>No influencers available</option>
+                                                            {% endif %}
+                                                        </datalist>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="budget-input-{{ campaign.campaign_id }}" class="col-form-label">Budget:</label>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text">₹</span>
+                                                        <input type="text" class="form-control" id="budget-input-{{ campaign.campaign_id }}" name="budget" aria-label="Amount (to the nearest rupee)" value="{{ campaign.budget }}">
+                                                        <span class="input-group-text">.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3 g-3">
+                                                <div class="col-md-6">
+                                                    <label for="start_date" class="form-label">Start Date</label>
+                                                    <input type="date" class="form-control" value="{{campaign.start_date}}" id="start_date" name="start_date" readonly>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="end_date" class="form-label">End Date</label>
+                                                    <input type="date" class="form-control" value="{{campaign.end_date}}" id="end_date" name="end_date" readonly>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="description-box-{{ campaign.campaign_id }}" class="col-form-label">Description:</label>
+                                                <textarea class="form-control" id="description-box-{{ campaign.campaign_id }}" readonly>{{ campaign.description }}</textarea>
+                                                <input type="hidden" name="description" value="{{ campaign.description }}">
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">SEND</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <input type="hidden" name="c_id" value="{{ campaign.campaign_id }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+                        <form action="/sponsor/campaign/{{ uname }}/UpdateCampaign" method="post" onsubmit="return validateDates()">
+                            <div class="modal fade" id="static-view-adRequest-{{ campaign.campaign_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-view-{{ campaign.campaign_id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel-view-{{ campaign.campaign_id }}">Update Campaign</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="campaign-id-{{ campaign.campaign_id }}" name="C_id" value="{{ campaign.campaign_id }}" readonly>
+                                                        <label for="campaign-id-{{ campaign.campaign_id }}">Campaign ID</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="campaign-name-{{ campaign.campaign_id }}" name="campaign_name" value="{{ campaign.campaign_name }}" required>
+                                                        <label for="campaign-name-{{ campaign.campaign_id }}">Campaign Name</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label for="budget-input-{{ campaign.campaign_id }}" class="form-label">Budget:</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">₹</span>
+                                                        <input type="number" class="form-control" id="budget-input-{{ campaign.campaign_id }}" name="budget" value="{{ campaign.budget }}" required>
+                                                        <span class="input-group-text">.00</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <label class="input-group-text" for="niche-select-{{ campaign.campaign_id }}">Niche</label>
+                                                        <select class="form-select" id="niche-select-{{ campaign.campaign_id }}" name="niche" {% if not campaign.niche %}disabled{% endif %}>
+                                                            <option value="" disabled selected>Choose...</option>
+                                                            {% for niche in niches %}
+                                                                <option value="{{ niche.niche_id }}" {% if niche.niche_id == campaign.niche %}selected{% endif %}>
+                                                                    {{ niche.name }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row mb-3 g-3">
+                                                <div class="col-md-6">
+                                                    <label for="start_date" class="form-label">Start Date</label>
+                                                    <input type="date" class="form-control" value="{{campaign.start_date}}" id="start_date" name="start_date" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="end_date" class="form-label">End Date</label>
+                                                    <input type="date" class="form-control" value="{{campaign.end_date}}" id="end_date" name="end_date" required>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="mb-3">
+                                                <label for="description-box-{{ campaign.campaign_id }}" class="form-label">Description:</label>
+                                                <textarea class="form-control" id="description-box-{{ campaign.campaign_id }}" name="description" required>{{ campaign.description }}</textarea>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <label class="input-group-text" for="influencer-search-{{ campaign.campaign_id }}">Preferred Influencer</label>
+                                                <input list="influencers-{{ campaign.campaign_id }}" class="form-control" id="influencer-search-{{ campaign.campaign_id }}" name="P_Influencer" placeholder="Type to search...">
+                                                <datalist id="influencers-{{ campaign.campaign_id }}">
+                                                    {% for influ in filtered_influencers[campaign.campaign_id] %}
+                                                        <option value="{{ influ.influencer_id }}">{{ influ.username }}</option>
+                                                    {% endfor %}
+                                                </datalist>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">
+                                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                                Update
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <script>
+                            document.getElementById('category-select-{{ campaign.campaign_id }}').addEventListener('change', function() {
+                                const nicheSelect = document.getElementById('niche-select-{{ campaign.campaign_id }}');
+                                nicheSelect.disabled = !this.value;
+                            });
+                        
+                            function validateDates() {
+                                const startDate = document.getElementById('start_date').value;
+                                const endDate = document.getElementById('end_date').value;
+                                if (new Date(startDate) >= new Date(endDate)) {
+                                    alert('End date must be after start date.');
+                                    return false;
+                                }
+                                return true;
+                            }
+                        </script>
+                        
+
+
+
+
+                        <!-- Modal for Delete Campaign -->
+                         <form action="/sponsor/campaign/{{uname}}/delete" method="post">
+                            <div class="modal fade" id="static-delete-adRequest-{{ campaign.campaign_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-delete-{{ campaign.campaign_id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel-delete-{{ campaign.campaign_id }}">Delete Campaign</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete this campaign?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="hidden" name="C_id" value="{{ campaign.campaign_id }}">
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         </form>
+  
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+
+
+
+    <!----List of campaigns  end---->
+
+
+    
+
+
+
+
+    <!-- End of Model dialog boxes for Lists-->
+
+
+    <!-- script for the filter of campaigns-->
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nicheCheckboxes = document.querySelectorAll('input[name="nicheType"]');
+            const campaignTypeCheckboxes = document.querySelectorAll('input[name="campaignType"]');
+            const tableRows = document.querySelectorAll('#campaignTable tbody tr');
+    
+            function filterTable() {
+                // Get selected niche IDs and campaign types
+                const selectedNiches = Array.from(nicheCheckboxes)
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.value);
+    
+                const selectedTypes = Array.from(campaignTypeCheckboxes)
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.value);
+    
+                tableRows.forEach(row => {
+                    const type = row.getAttribute('data-type');
+                    const niche = row.getAttribute('data-niche');
+    
+                    const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(type);
+                    const nicheMatch = selectedNiches.length === 0 || selectedNiches.includes(niche);
+    
+                    if (typeMatch && nicheMatch) {
+                        row.style.display = ''; // Show row
+                    } else {
+                        row.style.display = 'none'; // Hide row
+                    }
+                });
+            }
+    
+            nicheCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', filterTable);
+            });
+    
+            campaignTypeCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', filterTable);
+            });
+    
+            // Initial filter application
+            filterTable();
+        });
+    </script>
+    <script>document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('input[name="campaignType"]');
+        const tableRows = document.querySelectorAll('#campaignTable tbody tr');
+    
+        function filterTable() {
+            // Get the selected campaign types
+            const selectedTypes = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+    
+            tableRows.forEach(row => {
+                const type = row.getAttribute('data-type');
+                if (selectedTypes.length === 0 || selectedTypes.includes(type)) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        }
+    
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', filterTable);
+        });
+    
+        // Initial filter application
+        filterTable();
+    });
+    </script>
+    <script>document.addEventListener('DOMContentLoaded', function() {
+    const rangeInput = document.getElementById('budget');
+    const rangeValue = document.getElementById('budget-value');
+    const campaignTbody = document.getElementById('campaign-tbody');
+
+    function filterCampaigns() {
+        const selectedBudget = parseInt(rangeInput.value, 10);
+        rangeValue.textContent = `$${selectedBudget.toLocaleString()}`;
+        
+        const rows = campaignTbody.getElementsByTagName('tr');
+        
+        for (let i = 0; i < rows.length; i++) {
+            const budget = parseInt(rows[i].getAttribute('data-budget'), 10);
+            if (budget <= selectedBudget) {
+                rows[i].style.display = ''; // Show row
+            } else {
+                rows[i].style.display = 'none'; // Hide row
+            }
+        }
+    }
+
+    rangeInput.addEventListener('input', filterCampaigns);
+
+    // Initial filter
+    filterCampaigns();
+    });
+    </script>
+    <script>function searchFun() {
+        // Get the input value
+        const input = document.getElementById('myInput').value.toLowerCase();
+        
+        // Get the table body
+        const tableBody = document.getElementById('campaign-tbody');
+        
+        // Get all rows in the table
+        const rows = tableBody.getElementsByTagName('tr');
+        
+        // Loop through all table rows and hide those that don't match the search query
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            const campaignId = cells[0].textContent.toLowerCase();
+            
+            // Check if the row should be shown or hidden
+            if (campaignId.indexOf(input) > -1 || input === '') {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+    
+    // Optional: To trigger search on pressing Enter key in the input field
+    document.getElementById('myInput').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            searchFun();
+        }
+    });
+    </script>
+
+    
+    
+    
+    
+
+
+
+</body>
+<!--this is my footer part-->
+<footer>
+    <div class="container-footer">
+        <form action="">
+            
+        </form>
+    </div>
+    <div class="devop-rg">
+        <h4 ><strong><em>21f3002277@ds.study.iitm.ac.in  |</em>  VIKASH PRASAD</strong>  <em>|</em> IITMADRAS.All rights are reversed ** </h4>
+    </div>
+</footer>
+</html>

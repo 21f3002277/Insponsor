@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register|Insponsor</title>
+    <!--css link-->
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+     <!--js bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbars-r">
+        <div class="logo" >Insponsor</div>
+        <ul class="navbars-r-links">
+            <li><a href="/registerSponsor" style="margin-top: 15px;"><strong>SPONSOR</strong></a></li>
+            <li><a href="/registerInfluencer" style="margin-top: 15px;"><strong>INFLUENCER</strong></a></li>
+        </ul>
+        </div>
+    </nav>
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for  msg in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {{msg}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="container-userinfos">
+        <form action="/registerInfluencer" method="POST">
+            <h2>Register to Insponsor !! <br> <br>Join Now</h2>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="U_Id" placeholder="User-Id">
+                <label for="floatingInput">UserID</label>
+              </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="F_name" placeholder="Username">
+                <label for="floatingInput">Username</label>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="pwd">
+                        <label for="floatingInput">Password</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" class="form-control"  name="C_pwd">
+                        <label for="floatingInput">Confirm Password</label>
+                    </div>
+                </div>
+              </div>
+            <div class="row">
+                <div class="col">
+                    <label for="niche-select" class="form-label">Niche</label>
+                        <select id="inputState" class="form-select" name="niche">
+                            <option selected>Choose...</option>
+                            {% for niche in niches %}
+                                <option value="{{ niche.name }}">{{ niche.name }}</option>
+                            {% endfor %}
+                        </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" name="email" placeholder="name@example.com">
+                        <label for="floatingInput">Email</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="mobile_no" class="form-control" name="mobile" placeholder="name@example.com">
+                        <label for="floatingInput">Mobile No.</label>
+                    </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gridCheck">
+                <label class="form-check-label" for="gridCheck">
+                  Check me out
+                </label>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary" style="width: 240px; height: 35px al;">Join Now</button>
+              </div>
+              <div class="having_account">
+                <hr />
+                I have account ? <a href="/login">Login</a>
+            </div>
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='flash.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+
+<!--this is my footer part-->
+<footer>
+    <div class="container-footer">
+        <form action="">
+            
+        </form>
+    </div>
+    <div class="devop-rg">
+        <h4 ><strong><em>21f3002277@ds.study.iitm.ac.in  |</em>  VIKASH PRASAD</strong>  <em>|</em> IITMADRAS.All rights are reversed ** </h4>
+    </div>
+</footer>
+</html>

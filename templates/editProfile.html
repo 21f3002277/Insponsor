@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EditProfile|Insponsor</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+</head>
+<body>
+    <form action="/edit_profile/{{uname}}" method="post" enctype="multipart/form-data">
+        <div class="editprofile-container">
+            <h1>Edit Profile</h1>
+            <!-- form to edit profile -->
+            <div class="container-userinfo">
+    
+                <div class="profile-section">
+                    <img src="{{ influencer.profile_photo or '/static/img/blank-profile-picture-973460_1280.png' }}" alt="Profile Picture" style="border: 0px; margin-top: 0px;">
+                    <input type="file" name="photo" accept="image/*">
+                </div>
+    
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">User Id</label>
+                            <input type="text" class="form-control" id="user_id" name="U_id" value="{{influencer.influencer_id}}">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput2" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="U_name" name="U_name" value="{{influencer.username}}">
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="mb-3">
+                    <label for="formGroupExampleInput" class="form-label">Email Id</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{influencer.email}}">
+                </div>
+                <div class="mb-3">
+                    <label for="formGroupExampleInput2" class="form-label">Mobile No.</label>
+                    <input type="text" class="form-control" id="moblie" name="mobile" value="{{influencer.mobile_no}}">
+                </div>
+                <div class="mb-3">
+                    <label for="formGroupExampleInput" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" value="{{influencer.address}}">
+                </div>
+                <div class="mb-3">
+                    <label for="formGroupExampleInput2" class="form-label">Bio</label>
+                    <input type="text" class="form-control" id="bio" name="bio" value="{{influencer.bio}}">
+                </div>
+                <div class="col">
+                    <label for="niche-select" class="form-label">Niche</label>
+                        <select id="inputState" class="form-select" name="nic">
+                            <option value="{{ niche.niche_id }}" selected>{{niche.name}}</option>
+                            {% for nich in niches %}
+                                
+                                <option value="{{ nich.niche_id }}">{{ nich.name }}</option>
+                            {% endfor %}
+                        </select>
+                </div>
+                <div class="mb-3">
+                    <label for="basic-url" class="form-label">Your Social Media URLs:</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon-instagram">https://www.instagram.com/</span>
+                        <input type="text" class="form-control" id="instagram-url" name="instagram" aria-describedby="basic-addon-instagram">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon-facebook">https://www.facebook.com/</span>
+                        <input type="text" class="form-control" id="facebook-url" name="facebook" aria-describedby="basic-addon-facebook">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon-youtube">https://www.youtube.com/</span>
+                        <input type="text" class="form-control" id="youtube-url" name="youtube" aria-describedby="basic-addon-youtube">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon-linkedin">https://www.linkedin.com/</span>
+                        <input type="text" class="form-control" id="linkedin-url" name="linkedin" aria-describedby="basic-addon-linkedin">
+                    </div>
+                </div>
+                
+        
+            </div>
+            <button type="submit" class="btn btn-info">Save</button>
+        </div>
+    </form>
+
+    
+    
+</body>
+</html>

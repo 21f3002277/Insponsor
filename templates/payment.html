@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaymentGateway|Insponsor</title>
+    <!--css link-->
+    <link rel="stylesheet" href="/static/style.css">
+    <!--css  icons-->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!--css bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--js bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        
+
+        .payment-container-body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            margin: 0;
+            margin-top: 40px;
+        }
+        .payment-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            transition: all 0.3s ease;
+        }
+
+        .payment-container h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .form-group.hidden {
+            display: none;
+        }
+
+        .form-group .note {
+            font-size: 13px;
+            color: #888;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .form-group .payment-icon {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .form-group .payment-icon img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .form-group .payment-icon img + img {
+            margin-left: 10px;
+        }
+
+        /* Responsive Design */
+        @media only screen and (max-width: 600px) {
+            .payment-container {
+                padding: 20px;
+                width: 90%;
+            }
+
+            .form-group label {
+                font-size: 14px;
+            }
+
+            .form-group input, 
+            .form-group select {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .form-group input[type="submit"] {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!--Navbar-->   
+    <nav class="navbars-r">
+        <div class="logo">Insponsor</div>
+        <ul class="navbars-r-links">
+            {% if '/influencer' in current_url %}
+                <li ><a href="/influencer/{{uname}}"><strong></strong><span class="material-symbols-outlined">home</span></a></li>
+                <li><a href="/influencer/{{uname}}/search/campaigns"><strong></strong><span class="material-symbols-outlined" >work</span></a></li>
+                <li><a href="/influencer/statistics/{{uname}}"><strong></strong><span class="material-symbols-outlined">query_stats</span></a></li>
+                <li><a href="/influencer/profile/{{uname}}"><strong></strong><span class="material-symbols-outlined">person</span></a></li>
+            {% else %}
+                <li class="active"><a href="/sponsor/{{uname}}"><strong></strong><span class="material-symbols-outlined">home</span></a></li>
+                <li class="active"><a href="/sponsor/campaign/{{uname}}"><strong></strong><span class="material-symbols-outlined">campaign</span></a></li>
+                <li><a href="/sponsor/{{uname}}/searchInfluencer"><strong></strong><span class="material-symbols-outlined">person_search</span></a></li>
+                <li><a href="/sponsor/statistics/{{uname}}"><strong></strong><span class="material-symbols-outlined">query_stats</span></a></li>
+                <li><a href="/sponsor/profile/{{uname}}"><strong></strong><span class="material-symbols-outlined">person</span></a></li>
+            {% endif %}
+            <li><a href="/logout"><strong></strong><span class="material-symbols-outlined">logout</span></a></li>
+        </ul>
+    </nav>
+
+    <div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert-overlay">
+            {% for msg in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}</div>
+    <div class="payment-container-body">
+        <div class="payment-container">
+            <h2>Payment</h2>
+            <form action="/sponsor/{{uname}}/invoice/{{invoice_id}}/payment/gateway" method="POST" id="paymentForm">
+                <div class="form-group">
+                    <label for="Name">Name</label>
+                    <input type="text" id="sponsorName" name="sponsorName" placeholder="Enter your name" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="text" id="amount" name="amount" placeholder="Enter your amount" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="paymentMethod">Select Payment Method</label>
+                    <select id="paymentMethod" name="method" required onchange="togglePaymentMethod()">
+                        <option value="">Select</option>
+                        <option value="cards">Cards</option>
+                        <option value="upi">UPI</option>
+                        <option value="netbanking">Netbanking</option>
+                    </select>
+                </div>
+    
+                <div class="form-group payment-icon" id="paymentIcon">
+                  
+                </div>
+    
+                <!-- Card Payment Fields -->
+                <div class="form-group hidden" id="cardDetails">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" pattern="\d{4} \d{4} \d{4} \d{4}">
+                    
+                    <label for="expDate">Expiration Date</label>
+                    <input type="text" id="expDate" name="expDate" placeholder="MM/YY" pattern="\d{2}/\d{2}">
+                    
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv" placeholder="123" pattern="\d{3}">
+                </div>
+    
+                <!-- UPI Payment Fields -->
+                <div class="form-group hidden" id="upiDetails">
+                    <label for="upiId">UPI ID</label>
+                    <input type="text" id="upiId" name="upiId" placeholder="example@upi">
+                </div>
+    
+                <!-- Netbanking Payment Fields -->
+                <div class="form-group hidden" id="netbankingDetails">
+                    <label for="bankName">Select Your Bank</label>
+                    <select id="bankName" name="bankName">
+                        <option value="">Select a Bank</option>
+                        <option value="hdfc">HDFC Bank</option>
+                        <option value="sbi">State Bank of India</option>
+                        <option value="icici">ICICI Bank</option>
+                        <option value="axis">Axis Bank</option>
+                        <option value="kotak">Kotak Mahindra Bank</option>
+                    </select>
+                </div>
+    
+                <!-- Payment Button -->
+                <div class="form-group">
+                    <input type="submit" value="Submit Payment">
+                </div>
+    
+                <div class="form-group note">
+                    <p>Note: This is a dummy payment portal. No real transaction will occur.</p>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    
+
+    <script>
+        function togglePaymentMethod() {
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const cardDetails = document.getElementById('cardDetails');
+            const upiDetails = document.getElementById('upiDetails');
+            const netbankingDetails = document.getElementById('netbankingDetails');
+            const paymentIcon = document.getElementById('paymentIcon');
+            
+            // Hide all payment method details initially
+            cardDetails.classList.add('hidden');
+            upiDetails.classList.add('hidden');
+            netbankingDetails.classList.add('hidden');
+            paymentIcon.innerHTML = ''; // Clear any previously loaded icons
+
+            // Show the relevant form and icon based on selected method
+            if (paymentMethod === 'cards') {
+                cardDetails.classList.remove('hidden');
+                paymentIcon.innerHTML = `<img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa">
+                                         <img src="https://img.icons8.com/color/48/000000/mastercard-logo.png" alt="Mastercard">`;
+            } else if (paymentMethod === 'upi') {
+                upiDetails.classList.remove('hidden');
+                paymentIcon.innerHTML = `<img src="https://img.icons8.com/color/48/000000/upi.png" alt="UPI">`;
+            } else if (paymentMethod === 'netbanking') {
+                netbankingDetails.classList.remove('hidden');
+                paymentIcon.innerHTML = `<img src="https://img.icons8.com/color/48/000000/bank-building.png" alt="Netbanking">`;
+            }
+        }
+    </script>
+
+</body>
+</html>

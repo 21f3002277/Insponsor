@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice - {{ invoice.id }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #17a2b8;
+            padding-bottom: 20px;
+        }
+        .header img {
+            max-width: 120px;
+            height: auto;
+        }
+        .header h1 {
+            margin: 10px 0;
+            font-size: 36px;
+            color: #343a40;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 16px;
+            color: #6c757d;
+            margin: 5px 0;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #17a2b8;
+            border-bottom: 2px solid #17a2b8;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+        }
+        th {
+            background-color: #17a2b8;
+            color: #ffffff;
+        }
+        .total {
+            text-align: right;
+            font-weight: 700;
+        }
+        .total td {
+            border: none;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            text-align: center;
+            color: #6c757d;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .invoice-items {
+            margin: 20px 0;
+        }
+        .invoice-items table {
+            border: none;
+        }
+        .invoice-items th, .invoice-items td {
+            border: none;
+            text-align: right;
+        }
+        .highlight {
+            color: #17a2b8;
+            font-weight: 700;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #17a2b8;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #138496;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="path/to/your/logo.png" alt="Insponsor Logo">
+            <h1>Insponsor</h1>
+            <p>Invoice Number: {{ invoice.id }}</p>
+        </div>
+        
+        <div class="section invoice-details">
+            <h2>Invoice Details</h2>
+            <table>
+                <tr>
+                    <th>Invoice Date:</th>
+                    <td>{{ invoice.invoice_date.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                <tr>
+                    <th>Status:</th>
+                    <td class="highlight">{{ invoice.status }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section company-details">
+            <h2>Company Details</h2>
+            <table>
+                <tr>
+                    <th>Company Name:</th>
+                    <td>{{ sponsor.company }}</td>
+                </tr>
+                <tr>
+                    <th>Address:</th>
+                    <td>{{ sponsor.address }}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td>{{ sponsor.email }}</td>
+                </tr>
+                <tr>
+                    <th>Phone:</th>
+                    <td>{{ sponsor.mobile_no }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section customer-details">
+            <h2>Customer Details</h2>
+            <table>
+                <tr>
+                    <th>Customer Name:</th>
+                    <td>{{ influencer.username }}</td>
+                </tr>
+                <tr>
+                    <th>Address:</th>
+                    <td>{{ influencer.address }}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td>{{ influencer.email }}</td>
+                </tr>
+                <tr>
+                    <th>Phone:</th>
+                    <td>{{ influencer.mobile_no }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section campaign-details">
+            <h2>Campaign Details</h2>
+            <table>
+                <tr>
+                    <th>Campaign Name:</th>
+                    <td>{{ campaign.campaign_name }}</td>
+                </tr>
+                <tr>
+                    <th>Description:</th>
+                    <td>{{ campaign.description }}</td>
+                </tr>
+                <tr>
+                    <th>Budget:</th>
+                    <td>₹{{ campaign.budget }}</td>
+                </tr>
+                <tr>
+                    <th>Start Date:</th>
+                    <td>{{ campaign.start_date.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                <tr>
+                    <th>End Date:</th>
+                    <td>{{ campaign.end_date.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                <tr>
+                    <th>Status:</th>
+                    <td class="highlight">{{ campaign.status }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section invoice-items">
+            <h2>Invoice Items</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ campaign.description }}</td>
+                        <td>1</td>
+                        <td>₹{{ invoice.payment_amount }}</td>
+                        <td>₹{{ invoice.payment_amount }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="total">
+                <table>
+                    <tr>
+                        <th>Total Amount:</th>
+                        <td>₹{{ invoice.payment_amount }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Thank you for choosing Insponsor!</p>
+            <p>For any queries or support, contact us at <a href="mailto:{{ sponsor.email }}" class="btn">{{ sponsor.email }}</a></p>
+        </div>
+    </div>
+</body>
+</html>

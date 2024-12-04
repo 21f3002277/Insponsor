@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Statistics</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbars-r">
+        <div class="logo">Insponsor</div>
+        <ul class="navbars-r-links">
+            <li class="active"><a href="/adminDashboard"><span class="material-symbols-outlined">home</span></a></li>
+            <li><a href="/admin/search"><span class="material-symbols-outlined">search</span></a></li>
+            <li><a href="/admin/statistics"><span class="material-symbols-outlined">query_stats</span></a></li>
+            <li><a href="/logout"><span class="material-symbols-outlined">logout</span></a></li>
+        </ul>
+    </nav>
+    <div class="container mt-5" style="height: 100%;">
+        <h1 class="text-center">Admin Dashboard - Statistics</h1>
+        
+        <div class="row">
+            <!-- Users Statistics Pie Chart -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Users Distribution</h5>
+                        <canvas id="userChart"></canvas> <!-- Pie Chart -->
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Campaigns Status Pie Chart -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Campaigns Status</h5>
+                        <canvas id="campaignsCharts"></canvas> <!-- Pie Chart -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row ">
+            <!-- Ads Requests Bar Chart -->
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Ads Requests Status</h5>
+                        <canvas id="adsRequestsChart"></canvas> <!-- Bar Chart -->
+                    </div>
+                </div>
+            </div>
+            <!-- Payments Line Chart -->
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Payments & Invoices</h5>
+                        <canvas id="paymentsChart"></canvas> <!-- Line Chart -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+    <script>
+        // Fetch user data and define the chart configuration
+        const userData = JSON.parse(`{{ user_data|tojson|safe }}`);
+    
+        const userLabels = ['Total Users', 'Influencers', 'Sponsors'];
+        const userChartData = {
+            labels: userLabels,
+            datasets: [
+                {
+                    label: 'User Overview',
+                    data: userData,
+                    backgroundColor: [
+                        'rgb(255, 99, 132, 0.5)',
+                        'rgb(75, 192, 192, 0.5)',
+                        'rgb(255, 205, 86, 0.5)'
+                    ]
+                }
+            ]
+        };
+    
+        const ctx3 = document.getElementById('userChart').getContext('2d');
+        const config3 = new Chart(ctx3, {
+            type: 'polarArea',
+            data: userChartData,
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        pointLabels: {
+                            display: true,
+                            centerPointLabels: true,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'User Statistics'
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        // Fetch campaign data and define the chart configuration
+        const campaignData = JSON.parse(`{{ campaign_data|tojson|safe }}`);
+        
+        const campaignLabels = ['Total Campaigns', 'Active Campaigns', 'Pending Campaigns', 'Completed Campaigns', 'Flagged Campaigns'];
+        const campaignChartData = {
+            labels: campaignLabels,
+            datasets: [
+                {
+                    label: 'Campaigns Overview',
+                    data: campaignData,
+                    backgroundColor: [
+                        'rgb(255, 99, 132, 0.5)',
+                        'rgb(75, 192, 192, 0.5)',
+                        'rgb(255, 205, 86, 0.5)',
+                        'rgb(201, 203, 207, 0.5)',
+                        'rgb(54, 162, 235, 0.5)'
+                    ]
+                }
+            ]
+        };
+    
+        const ctx2 = document.getElementById('campaignsCharts').getContext('2d');
+        const config2 = new Chart(ctx2, {
+            type: 'polarArea',
+            data: campaignChartData,
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        pointLabels: {
+                            display: true,
+                            centerPointLabels: true,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Campaign Statistics'
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        // Ads Requests Bar Chart
+        const adsRequestsChart = new Chart(document.getElementById('adsRequestsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Pending', 'Approved', 'Rejected'],
+                datasets: [{
+                    label: 'Ads Requests',
+                    data: [`{{ pending_ads_requests }}`, `{{ approved_ads_requests }}`, `{{ rejected_ads_requests }}`],
+                    backgroundColor: ['#f6c23e', '#1cc88a', '#e74a3b'],
+                    hoverBackgroundColor: ['#dda20a', '#17a673', '#e02d1b'],
+                    borderColor: "#4e73df",
+                    borderWidth: 1
+                }],
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+    </script>
+    <script>
+        const paymentsChart = new Chart(document.getElementById('paymentsChart'), {
+            type: 'line',
+            data: {
+                labels: ['Total Invoiced', 'Total Paid', 'Pending Invoices'],
+                datasets: [{
+                    label: 'Payments & Invoices ($)',
+                    data: [`{{ total_invoiced_amount }}`, `{{ total_paid_amount }}`, `{{ pending_invoices }}`],
+                    backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                    borderColor: '#4e73df',
+                    pointRadius: 3,
+                    pointBackgroundColor: '#4e73df',
+                    pointBorderColor: '#4e73df',
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: '#4e73df',
+                    pointHoverBorderColor: '#4e73df',
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    tension: 0.4
+                }],
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    
+
+
+
+
+
+
+</body>
+<footer>
+    <div class="container-footer">
+        <form action="">
+            
+        </form>
+    </div>
+    <div class="devop-rg">
+        <h4 ><strong><em>21f3002277@ds.study.iitm.ac.in  |</em>  VIKASH PRASAD</strong>  <em>|</em> IITMADRAS.All rights are reversed ** </h4>
+    </div>
+</footer>
+</html>
+
+
